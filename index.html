@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ExEModzZ Store</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      background: #000020;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .background-blur {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top left, #0066ff, #0033cc, #000066);
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 40px;
+      margin: 40px 0 20px;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(0, 191, 255, 0.8);
+    }
+
+    header {
+      background: rgba(0, 0, 80, 0.6);
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    nav button {
+      background: transparent;
+      border: 2px solid #00bfff;
+      color: white;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav button:hover {
+      background: #00bfff;
+      color: black;
+    }
+
+    .auth-buttons {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .auth-buttons button {
+      margin: 0 20px;
+      padding: 20px 50px;
+      background: linear-gradient(to right, #00bfff, #007bff);
+      color: white;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 15px rgba(0,191,255,0.5);
+    }
+
+    .auth-buttons button:hover {
+      background: #005bbb;
+      transform: scale(1.08);
+    }
+
+    .auth-modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 50, 0.6);
+    }
+
+    .auth-form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      width: 300px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .auth-form input, .auth-form button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .auth-form button {
+      background: #00bfff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .auth-form a {
+      color: #00bfff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .auth-form span {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .filter-buttons {
+      text-align: center;
+      margin: 30px auto 0;
+    }
+
+    .filter-buttons button {
+      background: #0033cc;
+      color: white;
+      margin: 0 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .filter-buttons button:hover {
+      background: #0055ff;
+    }
+
+    .products {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 40px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      animation: slideUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .product-card img {
+      max-width: 100%;
+      border-radius: 30px;
+    }
+
+    .product-card h3 {
+      margin: 15px 0 5px;
+      font-size: 20px;
+    }
+
+    .stars {
+      color: gold;
+      margin: 5px 0;
+    }
+
+    .product-card p, .downloads {
+      margin-bottom: 10px;
+    }
+
+    .product-card button {
+      background: #00bfff;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .product-card button:hover {
+      background: #007acc;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    footer {
+      padding: 100px 20px;
+      background-color: rgba(0, 0, 50, 0.7);
+      text-align: center;
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .social-icons a img {
+      width: 40px;
+      transition: transform 0.3s;
+    }
+
+    .social-icons a img:hover {
+      transform: scale(1.2);
+    }
+
+    footer img {
+      width: 35px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="background-blur"></div>
+  <h1 class="page-title">EXEMODZZ STORE</h1>
+  <p style=" text-align: center;"> <b>Welcome To Our ExE Store </b></p><br><br><hr ><hr >
+  
+  <div class="auth-buttons">
+    <button onclick="showForm('login')">🔒 Login</button>
+    <button onclick="showForm('register')">📝 Register</button>
+  </div>
+
+  <!-- Auth Modal -->
+  <div class="auth-modal" id="authModal">
+    <div class="auth-form" id="loginForm">
+      <span onclick="hideForm()">❌</span>
+      <h2>Login</h2>
+      <input type="text" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button>Login</button>
+      <p>Don't have an account? <a onclick="switchForm('register')">Register</a></p>
+    </div>
+
+    <div class="auth-form" id="registerForm" style="display: none;">
+      <span onclick="hideForm()">❌</span>
+      <h2>Register</h2>
+      <input type="text" placeholder="Full Name" />
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button>Register</button>
+      <p>Already have an account? <a onclick="switchForm('login')">Login</a></p>
+    </div>
+  </div>
+
+  <!-- Filter Buttons -->
+ 
+
+  <!-- Product Section -->
+  <section class="products" id="products">
+    <div class="product-card mod">
+      <img src="IMG_20250730_160021_261.jpg" /><br>
+      <h3>OB50 DragHeadshot Hack</h3>
+      <div class="stars">★★★★★</div>
+      <p> 
+               <b>  [ OB50 DragHeadshot Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+      </p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b> 
+    <a href="https://t.me/+M7nADH6Oe3k2Y2Vl"> <button onclick="incrementDownloads(this)">Download Now</button> </a>
+    </div>
+    <div class="product-card mod">
+      <img src="IMG_20250730_160005_071.jpg" />
+      <h3>OB50 Body HS Hack</h3>
+      <div class="stars">★★★★☆</div>
+      <p>
+               <b>[ OB50 Body HS Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+      </p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b>
+      <button onclick="incrementDownloads(this)">Download Now</button>
+    </div>
+    <div class="product-card tools">
+      <img src="IMG_20250730_160021_258.jpg" />
+      <h3>OB50 MagicBullet Hack</h3>
+      <div class="stars">★★★★☆</div>
+      <p>    <b>  [ OB50 MagicBullet Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+</p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b>
+      <button onclick="incrementDownloads(this)">Download Now</button>
+    </div>
+    <div class="product-card tools">
+      <img src="IMG_20250730_155959_658.jpg" />
+      <h3>OB50 Drone MagicBullet Hack</h3>
+      <div class="stars">★★★☆☆</div>
+      <p>    <b>  [ OB50 Drone MagicBullet Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+</p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b>
+      <button onclick="incrementDownloads(this)">Download Now</button>
+    </div>
+    <div class="product-card premium">
+      <img src="IMG_20250801_013623.jpg" />
+      <h3>Safe Character's Hologram</h3>
+      <div class="stars">★★★★★</div>
+      <p>    <b>  [ OB50 Character's Hologram Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+</p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b>
+      <button onclick="incrementDownloads(this)">Download Now</button>
+    </div>
+    <div class="product-card premium">
+      <img src="IMG_20250801_013742.jpg" />
+      <h3>Safe 3D Hologram Hack</h3>
+      <div class="stars">★★★★★</div>
+      <p>    <b>  [ OB50 3D Hologram Hack ] </b><br><br>
+               <b> [ AntiBan & AntiBlacklist ] </b><br><br>
+               <b> [ DNS Required For Safety ] </b><br><br>
+               <b> [ Private Set-Up Process ]</b><br><br>
+               <b>  [ File Size [ Default ] </b><br>
+</p>
+      <p class="downloads"><b>DOWNLOADS: <span>0</span></p></b>
+      <button onclick="incrementDownloads(this)">Download Now</button>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="page-title">About Us</h2>
+    <p style="text-align:center;"> <strong>We offer quality game mods, tools, and bundles with top performance and design.</strong></p>
+  </section>
+
+  <section id="contact">
+    <h2 class="page-title">Contact</h2>
+    <p style="text-align:center;"> <strong>DM us on Telegram or Instagram for help or business inquiries. <strong> </p>
+<br>
+<br>
+<hr>
+  </section>
+
+  <footer>
+    <p> <strong>Join Our Community: </strong></p>
+    <div class="social-icons">
+      <a href="https://t.me/+M7nADH6Oe3k2Y2Vl" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" /></a>
+      <a href="https://youtube.com/@exe_modzz?si=D_TNIJ6h0tqpV7-Z" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" /></a>
+      <a href="https://www.instagram.com/vickyroxx_42?igsh=MTNqeGhvcmI0bjFkbQ==" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" /></a>
+    </div>
+    <p>&copy; 2025 ExEModzZ Store. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function showForm(type) {
+      document.getElementById('authModal').style.display = 'flex';
+      switchForm(type);
+    }
+
+    function hideForm() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function switchForm(type) {
+      document.getElementById('loginForm').style.display = type === 'login' ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = type === 'register' ? 'block' : 'none';
+    }
+
+    function incrementDownloads(btn) {
+      const countSpan = btn.parentElement.querySelector('.downloads span');
+      countSpan.textContent = parseInt(countSpan.textContent) + 1;
+    }
+
+    function filterProducts(type) {
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach(card => {
+        if (type === 'all' || card.classList.contains(type)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    window.onclick = function (event) {
+      if (event.target === document.getElementById('authModal')) hideForm();
+    };
+  </script>
+</body>
+</html>
